@@ -132,16 +132,17 @@ RUN ${BLENDERPIP} install pycuda pybind11 --target $PROGRESSLABELLER_BLENDER_PAT
 RUN $PROGRESSLABELLER_BLENDER_PATH/2.93/python/bin/python3.9 -m pip install  torch==2.0.0+cu118 torchvision==0.15.1+cu118 --index-url https://download.pytorch.org/whl/cu118 --target $PROGRESSLABELLER_BLENDER_PATH/2.93/python/lib/python3.9/site-packages 
 
 RUN cd /workspace && \
-    git clone https://github.com/huijieZH/ProgressLabeller.git && \
     git clone https://github.com/facebookresearch/pytorch3d.git && \
     cd /workspace/pytorch3d && \
     git checkout v0.7.2 && \
     ${BLENDERPIP} install -e . --target $PROGRESSLABELLER_BLENDER_PATH/2.93/python/lib/python3.9/site-packages
 
+RUN cd /workspace && \
+    git clone https://github.com/MyungHwanJeon/ProgressLabeller.git
+    
 ENV PROGRESSLABELLER_PATH "/workspace/ProgressLabeller"
 
-
-ENV ORB3_SOURCE_DIR = /workspace/ORB_SLAM3
+ENV ORB3_SOURCE_DIR "/workspace/ORB_SLAM3"
 RUN cd $PROGRESSLABELLER_PATH/kernel/orb_slam3 \
     && tar -xf ../orb_slam/ORBvoc.txt.tar.gz \
     && mkdir build \
@@ -150,7 +151,7 @@ RUN cd $PROGRESSLABELLER_PATH/kernel/orb_slam3 \
     && make
     
 RUN cd /workspace \
-    && git clone git@github.com:MyungHwanJeon/ProgressLabeller_for_TRansPose.git
+    && git clone https://github.com/MyungHwanJeon/ProgressLabeller_for_TRansPose.git
 
 ENV PROGRESSLABELLER_TRANSPOSE_PATH "/workspace/ProgressLabeller_for_TRansPose"
 
