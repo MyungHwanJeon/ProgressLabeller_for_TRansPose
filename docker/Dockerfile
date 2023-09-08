@@ -148,7 +148,12 @@ RUN cd $PROGRESSLABELLER_PATH/kernel/orb_slam3 \
     && cd build \
     && cmake .. \
     && make
+    
+RUN cd /workspace \
+    && git clone git@github.com:MyungHwanJeon/ProgressLabeller_for_TRansPose.git \
+
+ENV PROGRESSLABELLER_TRANSPOSE_PATH "/workspace/ProgressLabeller_for_TRansPose"
 
 # Set the working directory
-WORKDIR ${PROGRESSLABELLER_PATH}
+WORKDIR ${PROGRESSLABELLER_TRANSPOSE_PATH}
 CMD ["blender --python __init__.py"]
