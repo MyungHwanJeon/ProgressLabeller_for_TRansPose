@@ -157,4 +157,3 @@ ENV PROGRESSLABELLER_TRANSPOSE_PATH "/workspace/ProgressLabeller_for_TRansPose"
 
 # Set the working directory
 WORKDIR ${PROGRESSLABELLER_TRANSPOSE_PATH}
-ENTRYPOINT ["blender", "--python", "__init__.py"]
