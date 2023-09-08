@@ -48,18 +48,17 @@ RUN apt-get update && \
 	libatlas-base-dev gfortran libeigen3-dev \
 	python3-dev python3-numpy \
 	zip \
-    libboost-all-dev libglew-dev libssl-dev
-    
-RUN mkdir -p /etc/apt/keyrings \
-    && curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | tee /etc/apt/keyrings/librealsense.pgp > /dev/null
-    
-RUN echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | tee /etc/apt/sources.list.d/librealsense.list \
-    && apt-get update 
-    
-RUN apt-get install librealsense2-dkms librealsense2-utils librealsense2-dev librealsense2-dbg
-    
+    libboost-all-dev libglew-dev libssl-dev \
+    lsb        
 	
 RUN mkdir /workspace
+
+RUN mkdir -p /etc/apt/keyrings \
+    && curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | tee /etc/apt/keyrings/librealsense.pgp > /dev/null \
+    && echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | tee /etc/apt/sources.list.d/librealsense.list \
+    && apt-get update             
+    
+RUN apt-get install -y librealsense2-dkms librealsense2-utils librealsense2-dev librealsense2-dbg    
 
 ## install opencv
 RUN mkdir /workspace/opencv \
@@ -74,7 +73,7 @@ RUN mkdir /workspace/opencv \
     && cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=OFF -D WITH_IPP=OFF -D WITH_1394=OFF -D BUILD_WITH_DEBUG_INFO=OFF -D BUILD_DOCS=OFF -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=OFF -D BUILD_PACKAGE=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D WITH_QT=OFF -D WITH_GTK=ON -D WITH_OPENGL=ON -D BUILD_opencv_python3=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.4.0/modules -D WITH_V4L=ON  -D WITH_FFMPEG=ON -D WITH_XINE=ON -D OPENCV_ENABLE_NONFREE=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D OPENCV_SKIP_PYTHON_LOADER=ON -D OPENCV_GENERATE_PKGCONFIG=ON ../ \
     && time make -j$(nproc) \
     && make install \
-    && ldconfig \
+    && ldconfig        
     
 RUN cd /workspace \
     && git clone https://github.com/ZerenYu/ORB_SLAM3.git \
@@ -141,6 +140,7 @@ RUN cd /workspace && \
 
 ENV PROGRESSLABELLER_PATH "/workspace/ProgressLabeller"
 
+
 ENV ORB3_SOURCE_DIR = /workspace/ORB_SLAM3
 RUN cd $PROGRESSLABELLER_PATH/kernel/orb_slam3 \
     && tar -xf ../orb_slam/ORBvoc.txt.tar.gz \
@@ -150,7 +150,7 @@ RUN cd $PROGRESSLABELLER_PATH/kernel/orb_slam3 \
     && make
     
 RUN cd /workspace \
-    && git clone git@github.com:MyungHwanJeon/ProgressLabeller_for_TRansPose.git \
+    && git clone git@github.com:MyungHwanJeon/ProgressLabeller_for_TRansPose.git
 
 ENV PROGRESSLABELLER_TRANSPOSE_PATH "/workspace/ProgressLabeller_for_TRansPose"
 
